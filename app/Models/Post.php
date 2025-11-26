@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -45,6 +46,9 @@ class Post extends Model implements HasMedia
         static::creating(function ($post) {
             if (empty($post->slug)) {
                 $post->slug = \Illuminate\Support\Str::slug($post->title);
+            }
+            if (empty($post->author_id)) {
+                $post->author_id = Auth::id();
             }
         });
 

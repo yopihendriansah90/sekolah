@@ -89,11 +89,6 @@ class PostResource extends Resource
                                     ->label('Jadwal Publikasi')
                                     ->displayFormat('d/m/Y H:i')
                                     ->placeholder('Pilih waktu publikasi'),
-                                Forms\Components\Select::make('author_id')
-                                    ->label('Penulis')
-                                    ->relationship('author', 'name')
-                                    ->required()
-                                    ->placeholder('Pilih penulis artikel'),
                             ]),
                     ]),
             ]);
