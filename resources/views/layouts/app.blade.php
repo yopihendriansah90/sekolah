@@ -435,8 +435,16 @@
             border-radius: 0 0 10px 10px;
         }
 
-        /* Ensure dropdown is visible on mobile */
+        /* Mobile dropdown fixes */
         @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: white;
+                border-radius: 0 0 10px 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                margin-top: 1rem;
+                padding: 1rem;
+            }
+
             .dropdown-menu {
                 position: static;
                 float: none;
@@ -445,18 +453,101 @@
                 background-color: transparent;
                 border: none;
                 box-shadow: none;
-                padding-left: 1rem;
+                padding: 0;
+                display: none;
+                /* Initially hidden */
+            }
+
+            .dropdown-menu.show {
+                display: block;
+                /* Show when dropdown is open */
             }
 
             .dropdown-item {
-                padding: 0.5rem 1rem;
+                padding: 0.75rem 1rem;
                 color: var(--text-secondary);
+                border-radius: 8px;
+                margin-bottom: 0.25rem;
+                transition: all 0.3s ease;
             }
 
-            .dropdown-item:hover {
+            .dropdown-item:hover,
+            .dropdown-item:focus {
                 background: var(--light-blue);
                 color: var(--primary-blue);
-                transform: none;
+                transform: translateX(5px);
+            }
+
+            .dropdown-item.active {
+                background: var(--primary-blue);
+                color: white;
+            }
+
+            /* Make dropdown toggle clickable on mobile */
+            .dropdown-toggle {
+                cursor: pointer;
+                position: relative;
+                width: 100%;
+                text-align: left;
+                display: block;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            .dropdown-toggle::after {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%) rotate(0deg);
+                transition: transform 0.3s ease;
+                font-size: 0.8rem;
+            }
+
+            .dropdown-toggle[aria-expanded="true"]::after {
+                transform: translateY(-50%) rotate(180deg);
+            }
+
+            /* Ensure proper spacing */
+            .navbar-nav .nav-item {
+                margin-bottom: 0.5rem;
+            }
+
+            .navbar-nav .dropdown .nav-link {
+                padding-right: 2.5rem;
+                display: block;
+                width: 100%;
+            }
+
+            /* Ensure dropdown items are clickable */
+            .dropdown-item {
+                cursor: pointer;
+                display: block;
+                width: 100%;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .dropdown-item:hover,
+            .dropdown-item:focus {
+                transform: translateX(5px);
+            }
+
+            /* Prevent accidental text selection */
+            .navbar-nav {
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            .navbar-nav .nav-link {
+                -webkit-user-select: text;
+                -moz-user-select: text;
+                -ms-user-select: text;
+                user-select: text;
             }
         }
 
@@ -512,10 +603,10 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                            aria-expanded="false" id="tentang-dropdown">
                             Tentang Kami
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" aria-labelledby="tentang-dropdown">
                             <li><a class="dropdown-item {{ request()->routeIs('about') ? 'active' : '' }}"
                                     href="{{ route('about') }}">Profil Sekolah</a></li>
                             <li><a class="dropdown-item {{ request()->routeIs('teachers') ? 'active' : '' }}"
@@ -526,10 +617,10 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                            aria-expanded="false" id="akademik-dropdown">
                             Akademik
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" aria-labelledby="akademik-dropdown">
                             <li><a class="dropdown-item {{ request()->routeIs('facilities') ? 'active' : '' }}"
                                     href="{{ route('facilities') }}">Fasilitas</a></li>
                             <li><a class="dropdown-item {{ request()->routeIs('majors') ? 'active' : '' }}"
@@ -605,10 +696,11 @@
 
     <!-- Custom JavaScript -->
     <script>
-        // Navbar scroll effect
+        // Navbar functionality
         document.addEventListener('DOMContentLoaded', function() {
             const navbar = document.querySelector('.navbar');
 
+            // Navbar scroll effect
             window.addEventListener('scroll', function() {
                 if (window.scrollY > 50) {
                     navbar.classList.add('scrolled');
@@ -617,31 +709,107 @@
                 }
             });
 
-            // Ensure dropdown menus work properly
-            const dropdowns = document.querySelectorAll('.dropdown-toggle');
+            // Handle mobile dropdown menus
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
-            dropdowns.forEach(dropdown => {
-                dropdown.addEventListener('click', function(e) {
-                    // Only prevent default if it's a dropdown toggle (not a link)
-                    if (this.getAttribute('href') === '#') {
-                        e.preventDefault();
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const dropdownMenu = this.nextElementSibling;
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                    // On mobile, always handle dropdown manually
+                    if (window.innerWidth < 992) {
+                        // Close all other dropdowns first
+                        document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                            if (menu !== dropdownMenu) {
+                                menu.classList.remove('show');
+                                const otherToggle = menu.previousElementSibling;
+                                if (otherToggle && otherToggle !== this) {
+                                    otherToggle.setAttribute('aria-expanded', 'false');
+                                }
+                            }
+                        });
+
+                        // Toggle current dropdown
+                        if (isExpanded) {
+                            dropdownMenu.classList.remove('show');
+                            this.setAttribute('aria-expanded', 'false');
+                        } else {
+                            dropdownMenu.classList.add('show');
+                            this.setAttribute('aria-expanded', 'true');
+                        }
                     }
+                    // On desktop, let Bootstrap handle it
                 });
+
+                // Prevent Bootstrap dropdown on mobile
+                if (window.innerWidth < 992) {
+                    toggle.removeAttribute('data-bs-toggle');
+                }
             });
 
-            // Close mobile menu when clicking a link
-            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                        menu.classList.remove('show');
+                        const toggle = menu.previousElementSibling;
+                        if (toggle) {
+                            toggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                }
+            });
+
+            // Close mobile menu when clicking a nav link
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link:not(.dropdown-toggle)');
             const navbarCollapse = document.querySelector('.navbar-collapse');
 
             navLinks.forEach(link => {
                 link.addEventListener('click', function() {
-                    if (navbarCollapse.classList.contains('show')) {
+                    if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
                         const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
                             hide: true
                         });
                     }
                 });
             });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+                if (window.innerWidth >= 992) {
+                    // Reset mobile dropdowns on desktop
+                    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                        menu.classList.remove('show');
+                        const toggle = menu.previousElementSibling;
+                        if (toggle) {
+                            toggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    // Re-enable Bootstrap dropdown on desktop
+                    dropdownToggles.forEach(toggle => {
+                        toggle.setAttribute('data-bs-toggle', 'dropdown');
+                    });
+                } else {
+                    // Disable Bootstrap dropdown on mobile
+                    dropdownToggles.forEach(toggle => {
+                        toggle.removeAttribute('data-bs-toggle');
+                    });
+                }
+            });
+
+            // Initialize mobile dropdowns on page load
+            if (window.innerWidth < 992) {
+                document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                    toggle.removeAttribute('data-bs-toggle');
+                });
+            }
 
             // Add fade-in animation to sections
             const observerOptions = {
