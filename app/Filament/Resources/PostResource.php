@@ -6,6 +6,8 @@ use App\Filament\Resources\PostResource\Pages;
 use App\Models\Kategori;
 use App\Models\Post;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,40 +30,72 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\SpatieMediaLibraryFileUpload::make('cover')
-                    ->collection('cover')
-                    ->image(),
-                Forms\Components\RichEditor::make('body')
-                    ->required()
-                    // ->toolbarButtons([
-                    //     'bold',
-                    //     'italic',
-                    //     'underline',
-                    //     'strike',
-                    //     'link',
-                    //     'image',
-                    //     'bulletList',
-                    //     'orderedList',
-                    // ])
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('category')
-                    ->options(Kategori::pluck('name', 'name'))
-                    ->required(),
-                Forms\Components\Toggle::make('is_published'),
-                Forms\Components\DateTimePicker::make('published_at'),
-                Forms\Components\Select::make('author_id')
-                    ->relationship('author', 'name')
-                    ->required(),
-                Forms\Components\SpatieMediaLibraryFileUpload::make('images')
-                    ->collection('images')
-                    ->multiple()
-                    ->image(),
+                Section::make('Informasi Postingan')
+                    ->description('Detail utama artikel')
+                    ->icon('heroicon-o-document-text')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                Forms\Components\TextInput::make('title')
+                                    ->label('Judul Postingan')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->placeholder('Masukkan judul artikel yang menarik')
+                                    ->columnSpan(1),
+                                Forms\Components\Select::make('category')
+                                    ->label('Kategori')
+                                    ->options(Kategori::pluck('name', 'name'))
+                                    ->required()
+                                    ->placeholder('Pilih kategori artikel')
+                                    ->columnSpan(1),
+                            ]),
+                        Forms\Components\TextInput::make('slug')
+                            ->hidden()
+                            ->dehydrated()
+                            ->required()
+                            ->maxLength(255),
+                    ]),
+
+                Section::make('Konten & Media')
+                    ->description('Isi artikel dan gambar pendukung')
+                    ->icon('heroicon-o-photo')
+                    ->schema([
+                        Forms\Components\SpatieMediaLibraryFileUpload::make('cover')
+                            ->label('Gambar Cover')
+                            ->collection('cover')
+                            ->image()
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(2048)
+                            ->helperText('Upload gambar cover untuk artikel (maksimal 2MB)'),
+                        Forms\Components\RichEditor::make('body')
+                            ->label('Isi Artikel')
+                            ->required()
+
+                            ->placeholder('Tulis isi artikel di sini... Klik tombol gambar di toolbar untuk menambahkan gambar ke artikel.')
+                            ->helperText('Gunakan tombol gambar di toolbar untuk upload dan sisipkan gambar langsung ke dalam artikel.')
+                            ->columnSpanFull(),
+                    ]),
+
+                Section::make('Publikasi & Penulis')
+                    ->description('Pengaturan publikasi artikel')
+                    ->icon('heroicon-o-clock')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                Forms\Components\Toggle::make('is_published')
+                                    ->label('Terbitkan Sekarang')
+                                    ->helperText('Aktifkan untuk mempublikasikan artikel'),
+                                Forms\Components\DateTimePicker::make('published_at')
+                                    ->label('Jadwal Publikasi')
+                                    ->displayFormat('d/m/Y H:i')
+                                    ->placeholder('Pilih waktu publikasi'),
+                                Forms\Components\Select::make('author_id')
+                                    ->label('Penulis')
+                                    ->relationship('author', 'name')
+                                    ->required()
+                                    ->placeholder('Pilih penulis artikel'),
+                            ]),
+                    ]),
             ]);
     }
 
@@ -69,43 +103,97 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
                 SpatieMediaLibraryImageColumn::make('cover')
-                    ->collection('cover'),
+                    ->label('Cover')
+                    ->collection('cover')
+                    ->circular()
+                    ->size(50)
+                    ->defaultImageUrl('/images/placeholder-post.png'),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Judul')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold')
+                    ->limit(50)
+                    ->tooltip(function ($record): ?string {
+                        return strlen($record->title) > 50 ? $record->title : null;
+                    }),
                 Tables\Columns\TextColumn::make('category')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('is_published')
-                    ->boolean(),
+                    ->label('Kategori')
+                    ->searchable()
+                    ->badge()
+                    ->color('primary'),
+                Tables\Columns\TextColumn::make('is_published')
+                    ->label('Status')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => $state ? 'Published' : 'Draft')
+                    ->color(fn ($state) => $state ? 'success' : 'warning'),
                 Tables\Columns\TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable(),
+                    ->label('Diterbitkan')
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable()
+                    ->placeholder('Belum diterbitkan')
+                    ->icon('heroicon-o-clock'),
                 Tables\Columns\TextColumn::make('author.name')
-                    ->sortable(),
-                SpatieMediaLibraryImageColumn::make('images')
-                    ->collection('images'),
+                    ->label('Penulis')
+                    ->sortable()
+                    ->searchable()
+                    ->icon('heroicon-o-user'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Dibuat')
+                    ->dateTime('d/m/Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Diubah')
+                    ->dateTime('d/m/Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('is_published')
+                    ->label('Status Publikasi')
+                    ->options([
+                        '1' => 'Published',
+                        '0' => 'Draft',
+                    ]),
+                Tables\Filters\SelectFilter::make('category')
+                    ->label('Kategori')
+                    ->options(Kategori::pluck('name', 'name')),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label('Lihat')
+                    ->icon('heroicon-o-eye'),
+                Tables\Actions\EditAction::make()
+                    ->label('Edit')
+                    ->icon('heroicon-o-pencil'),
+                Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
+                    ->icon('heroicon-o-trash')
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus Postingan')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus postingan ini? Tindakan ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Ya, Hapus'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label('Hapus Terpilih')
+                        ->icon('heroicon-o-trash')
+                        ->requiresConfirmation()
+                        ->modalHeading('Hapus Postingan Terpilih')
+                        ->modalDescription('Apakah Anda yakin ingin menghapus postingan yang dipilih? Tindakan ini tidak dapat dibatalkan.')
+                        ->modalSubmitActionLabel('Ya, Hapus Semua'),
                 ]),
-            ]);
+            ])
+            ->emptyStateHeading('Belum ada postingan')
+            ->emptyStateDescription('Buat postingan pertama untuk memulai mengelola konten sekolah.')
+            ->emptyStateIcon('heroicon-o-document-text')
+            ->striped()
+            ->paginated([10, 25, 50, 100])
+            ->poll('30s');
     }
 
     public static function getRelations(): array

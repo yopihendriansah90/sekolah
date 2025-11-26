@@ -35,5 +35,23 @@ class Post extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images');
+        $this->addMediaCollection('cover');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($post) {
+            if (empty($post->slug)) {
+                $post->slug = \Illuminate\Support\Str::slug($post->title);
+            }
+        });
+
+        static::updating(function ($post) {
+            if ($post->isDirty('title') && empty($post->slug)) {
+                $post->slug = \Illuminate\Support\Str::slug($post->title);
+            }
+        });
     }
 }

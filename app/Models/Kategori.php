@@ -20,4 +20,21 @@ class Kategori extends Model
     {
         return $this->hasMany(Post::class, 'category', 'name');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($kategori) {
+            if (empty($kategori->slug)) {
+                $kategori->slug = \Illuminate\Support\Str::slug($kategori->name);
+            }
+        });
+
+        static::updating(function ($kategori) {
+            if ($kategori->isDirty('name')) {
+                $kategori->slug = \Illuminate\Support\Str::slug($kategori->name);
+            }
+        });
+    }
 }
