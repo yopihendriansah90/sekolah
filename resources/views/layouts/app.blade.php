@@ -90,6 +90,12 @@
             font-weight: 700;
             font-size: 1.5rem;
             color: var(--primary-blue) !important;
+            text-decoration: none;
+        }
+
+        .brand-text {
+            display: inline-block;
+            vertical-align: middle;
         }
 
         .navbar-nav .nav-link {
@@ -551,6 +557,67 @@
             }
         }
 
+        /* Mobile Navbar Layout Fix */
+        @media (max-width: 991.98px) {
+            .navbar {
+                padding: 0.5rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.1rem;
+                margin-right: 0.5rem;
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                align-items: center;
+            }
+
+            .brand-text {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                flex: 1;
+                min-width: 0;
+            }
+
+            .navbar-toggler {
+                border: none;
+                background: var(--primary-blue);
+                color: white;
+                border-radius: 6px;
+                padding: 0.375rem 0.5rem;
+                margin-left: auto;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+            }
+
+            .navbar-toggler-icon {
+                width: 1rem;
+                height: 1rem;
+            }
+
+            /* Ensure navbar header stays horizontal */
+            .navbar>.container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 0;
+            }
+
+            .navbar-brand,
+            .navbar-toggler {
+                display: flex;
+                align-items: center;
+            }
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .hero-section {
@@ -558,7 +625,8 @@
             }
 
             .navbar-brand {
-                font-size: 1.25rem;
+                font-size: 1rem;
+                max-width: calc(100vw - 80px);
             }
 
             .btn {
@@ -576,6 +644,18 @@
                 padding: 0.5rem 0;
             }
         }
+
+        /* Extra small screens */
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 0.9rem;
+                max-width: calc(100vw - 70px);
+            }
+
+            .navbar-toggler {
+                padding: 0.25rem 0.375rem;
+            }
+        }
     </style>
 
     @stack('styles')
@@ -584,13 +664,13 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
                 <i class="bi bi-mortarboard-fill me-2"></i>
-                {{ $settings['school_name'] ?? 'Sekolah Indonesia' }}
+                <span class="brand-text">{{ $settings['school_name'] ?? 'Sekolah Indonesia' }}</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
