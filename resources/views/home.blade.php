@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section id="home" class="hero-section">
+    <section id="home" class="hero-primary">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
@@ -13,12 +13,12 @@
                     <p class="mb-4 lead">
                         {{ $settings['school_description'] ?? 'Sekolah berkualitas dengan pendidikan terbaik untuk masa depan siswa.' }}
                     </p>
-                    <a href="#tentang" class="btn btn-light btn-lg me-3">Pelajari Lebih Lanjut</a>
-                    <a href="#kontak" class="btn btn-outline-light btn-lg">Hubungi Kami</a>
+                    <a href="{{ route('about') }}" class="btn btn-light btn-lg me-3">Pelajari Lebih Lanjut</a>
+                    <a href="{{ route('contact') }}" class="btn btn-outline-light btn-lg">Hubungi Kami</a>
                 </div>
                 <div class="col-lg-6">
                     <img src="{{ asset('images/school-hero.jpg') }}" alt="Sekolah" class="rounded shadow img-fluid"
-                        onerror="this.src='https://via.placeholder.com/600x400/667eea/white?text=Sekolah'">
+                        onerror="this.src='https://via.placeholder.com/600x400/2563eb/white?text=Sekolah'">
                 </div>
             </div>
         </div>
@@ -28,15 +28,23 @@
     <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center row">
-                @foreach ($pencapaians as $pencapaian)
+                @foreach ($pencapaians as $index => $pencapaian)
                     <div class="mb-4 col-md-3">
-                        <div class="border-0 shadow card stats-card h-100">
+                        <div
+                            class="border-0 shadow card h-100
+                            @if ($index % 3 == 0) stats-card-primary
+                            @elseif($index % 3 == 1) stats-card-secondary
+                            @else stats-card-accent @endif">
                             <div class="p-4 card-body">
                                 @if ($pencapaian->getFirstMediaUrl('icons'))
                                     <img src="{{ $pencapaian->getFirstMediaUrl('icons') }}" alt="{{ $pencapaian->metric }}"
                                         class="p-2 mb-3 bg-white achievement-icon rounded-circle">
                                 @else
-                                    <div class="mb-3 bg-white achievement-icon text-primary">
+                                    <div
+                                        class="mb-3 bg-white achievement-icon
+                                        @if ($index % 3 == 0) achievement-icon-primary
+                                        @elseif($index % 3 == 1) achievement-icon-secondary
+                                        @else achievement-icon-accent @endif">
                                         <i class="bi bi-trophy fs-1"></i>
                                     </div>
                                 @endif
@@ -63,9 +71,9 @@
             </div>
             <div class="row">
                 <div class="mb-4 col-md-4">
-                    <div class="border-0 shadow card h-100 card-hover">
+                    <div class="border-0 shadow card h-100 card-hover card-primary">
                         <div class="p-4 text-center card-body">
-                            <i class="mb-3 bi bi-eye text-primary fs-1"></i>
+                            <i class="mb-3 bi bi-eye text-primary-custom fs-1"></i>
                             <h5 class="card-title">Visi</h5>
                             <p class="card-text">
                                 {{ $settings['school_vision'] ?? 'Mencetak generasi unggul yang berakhlak mulia dan berprestasi.' }}
@@ -74,9 +82,9 @@
                     </div>
                 </div>
                 <div class="mb-4 col-md-4">
-                    <div class="border-0 shadow card h-100 card-hover">
+                    <div class="border-0 shadow card h-100 card-hover card-secondary">
                         <div class="p-4 text-center card-body">
-                            <i class="mb-3 bi bi-target text-success fs-1"></i>
+                            <i class="mb-3 bi bi-target text-secondary-custom fs-1"></i>
                             <h5 class="card-title">Misi</h5>
                             <p class="card-text">
                                 {{ $settings['school_mission'] ?? 'Menyediakan pendidikan berkualitas dengan kurikulum modern dan tenaga pengajar profesional.' }}
@@ -85,9 +93,9 @@
                     </div>
                 </div>
                 <div class="mb-4 col-md-4">
-                    <div class="border-0 shadow card h-100 card-hover">
+                    <div class="border-0 shadow card h-100 card-hover card-accent">
                         <div class="p-4 text-center card-body">
-                            <i class="mb-3 bi bi-clock-history text-info fs-1"></i>
+                            <i class="mb-3 bi bi-clock-history text-accent-custom fs-1"></i>
                             <h5 class="card-title">Sejarah</h5>
                             <p class="card-text">
                                 {{ $settings['school_history'] ?? 'Sekolah ini didirikan dengan tujuan memberikan pendidikan berkualitas sejak tahun 2000.' }}
@@ -109,7 +117,7 @@
                 </div>
             </div>
             <div class="row">
-                @forelse($fasilitas as $fasilitas)
+                @forelse($fasilitas->take(6) as $fasilitas)
                     <div class="mb-4 col-md-6 col-lg-4">
                         <div class="border-0 shadow card h-100 card-hover facility-card">
                             @if ($fasilitas->getFirstMediaUrl('images'))
@@ -136,6 +144,11 @@
                     </div>
                 @endforelse
             </div>
+            @if ($fasilitas->count() > 6)
+                <div class="mt-4 text-center">
+                    <a href="{{ route('facilities') }}" class="btn btn-outline-primary">Lihat Semua Fasilitas</a>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -190,6 +203,11 @@
                     </div>
                 @endforelse
             </div>
+            @if ($gurus->count() > 8)
+                <div class="mt-4 text-center">
+                    <a href="{{ route('teachers') }}" class="btn btn-outline-primary">Lihat Semua Guru</a>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -237,7 +255,8 @@
             </div>
             @if ($siswas->count() > 8)
                 <div class="mt-4 text-center">
-                    <p class="text-muted">Dan {{ $siswas->count() - 8 }} siswa lainnya...</p>
+                    <p class="mb-3 text-muted">Dan {{ $siswas->count() - 8 }} siswa lainnya...</p>
+                    <a href="{{ route('students') }}" class="btn btn-outline-success">Lihat Semua Siswa</a>
                 </div>
             @endif
         </div>
@@ -291,6 +310,11 @@
                     </div>
                 @endforelse
             </div>
+            @if ($posts->count() >= 6)
+                <div class="mt-4 text-center">
+                    <a href="{{ route('news') }}" class="btn btn-outline-primary">Lihat Semua Berita</a>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -342,6 +366,11 @@
                     </div>
                 @endforelse
             </div>
+            @if ($events->count() > 3)
+                <div class="mt-4 text-center">
+                    <a href="{{ route('events') }}" class="btn btn-outline-info">Lihat Semua Kegiatan</a>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -389,42 +418,45 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="kontak" class="py-5 text-white bg-primary">
+    <section id="kontak" class="py-5 bg-warm">
         <div class="container">
             <div class="row">
                 <div class="mb-5 text-center col-12">
-                    <h2 class="text-white section-title">Hubungi Kami</h2>
+                    <h2 class="section-title">Hubungi Kami</h2>
                     <p class="lead">Kami siap membantu dan menjawab pertanyaan Anda</p>
                 </div>
             </div>
             <div class="row">
                 <div class="mb-4 col-md-4">
                     <div class="text-center">
-                        <i class="mb-3 bi bi-geo-alt fs-1"></i>
+                        <i class="mb-3 bi bi-geo-alt text-primary-custom fs-1"></i>
                         <h5>Alamat</h5>
                         <p>{{ $settings['school_address'] ?? 'Alamat sekolah belum diatur' }}</p>
                     </div>
                 </div>
                 <div class="mb-4 col-md-4">
                     <div class="text-center">
-                        <i class="mb-3 bi bi-telephone fs-1"></i>
+                        <i class="mb-3 bi bi-telephone text-secondary-custom fs-1"></i>
                         <h5>Telepon</h5>
                         <p>{{ $settings['school_phone'] ?? 'Telepon belum diatur' }}</p>
                         @if ($settings['school_phone'] ?? false)
-                            <a href="tel:{{ $settings['school_phone'] }}" class="btn btn-light">Hubungi</a>
+                            <a href="tel:{{ $settings['school_phone'] }}" class="btn btn-secondary">Hubungi</a>
                         @endif
                     </div>
                 </div>
                 <div class="mb-4 col-md-4">
                     <div class="text-center">
-                        <i class="mb-3 bi bi-envelope fs-1"></i>
+                        <i class="mb-3 bi bi-envelope text-accent-custom fs-1"></i>
                         <h5>Email</h5>
                         <p>{{ $settings['school_email'] ?? 'Email belum diatur' }}</p>
                         @if ($settings['school_email'] ?? false)
-                            <a href="mailto:{{ $settings['school_email'] }}" class="btn btn-light">Kirim Email</a>
+                            <a href="mailto:{{ $settings['school_email'] }}" class="btn btn-accent">Kirim Email</a>
                         @endif
                     </div>
                 </div>
+            </div>
+            <div class="mt-4 text-center">
+                <a href="{{ route('contact') }}" class="btn btn-primary">Kontak Lengkap</a>
             </div>
         </div>
     </section>
