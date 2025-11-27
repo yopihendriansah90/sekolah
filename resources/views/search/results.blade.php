@@ -51,20 +51,7 @@
                 @if ($results->count() > 0)
                     <div class="mb-4 d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Ditemukan {{ $results->count() }} hasil</h3>
-                        <div class="btn-group" role="group">
-                            <a href="{{ route('news') }}" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-newspaper me-1"></i>Berita
-                            </a>
-                            <a href="{{ route('events') }}" class="btn btn-outline-success btn-sm">
-                                <i class="bi bi-calendar-event me-1"></i>Kegiatan
-                            </a>
-                            <a href="{{ route('students') }}" class="btn btn-outline-info btn-sm">
-                                <i class="bi bi-mortarboard me-1"></i>Siswa
-                            </a>
-                            <a href="{{ route('teachers') }}" class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-people me-1"></i>Guru
-                            </a>
-                        </div>
+
                     </div>
 
                     <div class="row">
@@ -73,8 +60,8 @@
                                 <a href="{{ $result->url }}" class="text-decoration-none">
                                     <div class="border-0 shadow card h-100 card-hover">
                                         @if ($result->image)
-                                            <img src="{{ $result->image }}" class="card-img-top"
-                                                alt="{{ $result->title }}" style="height: 200px; object-fit: cover;">
+                                            <img src="{{ $result->image }}" class="card-img-top" alt="{{ $result->title }}"
+                                                style="height: 200px; object-fit: cover;">
                                         @else
                                             <div class="text-white card-img-top d-flex align-items-center justify-content-center"
                                                 style="height: 200px; background: linear-gradient(135deg, {{ $result->type == 'Berita' ? '#007bff' : ($result->type == 'Kegiatan' ? '#28a745' : ($result->type == 'Siswa' ? '#17a2b8' : ($result->type == 'Guru' ? '#ffc107' : '#6c757d'))) }}, {{ $result->type == 'Berita' ? '#0056b3' : ($result->type == 'Kegiatan' ? '#1e7e34' : ($result->type == 'Siswa' ? '#117a8b' : ($result->type == 'Guru' ? '#e0a800' : '#545b62'))) }});">
