@@ -269,18 +269,6 @@
                                 <h6 class="card-title fw-bold">{{ $guru->name }}</h6>
                                 <p class="mb-1 text-primary">{{ $guru->subject }}</p>
                                 <small class="text-muted">NIP: {{ $guru->nip }}</small>
-                                <div class="mt-2">
-                                    @if ($guru->email)
-                                        <a href="mailto:{{ $guru->email }}" class="text-decoration-none me-2">
-                                            <i class="bi bi-envelope text-primary"></i>
-                                        </a>
-                                    @endif
-                                    @if ($guru->phone)
-                                        <a href="tel:{{ $guru->phone }}" class="text-decoration-none">
-                                            <i class="bi bi-telephone text-success"></i>
-                                        </a>
-                                    @endif
-                                </div>
                             </div>
                         </div>
                     </div>

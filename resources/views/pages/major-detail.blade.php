@@ -75,19 +75,6 @@
                                     <h6 class="card-title fw-bold">{{ $guru->name }}</h6>
                                     <p class="mb-2 text-primary">{{ $guru->subject }}</p>
                                     <small class="mb-2 text-muted d-block">NIP: {{ $guru->nip }}</small>
-                                    <div class="mt-3">
-                                        @if ($guru->email)
-                                            <a href="mailto:{{ $guru->email }}"
-                                                class="mb-1 btn btn-outline-primary btn-sm me-1">
-                                                <i class="bi bi-envelope"></i>
-                                            </a>
-                                        @endif
-                                        @if ($guru->phone)
-                                            <a href="tel:{{ $guru->phone }}" class="mb-1 btn btn-outline-success btn-sm">
-                                                <i class="bi bi-telephone"></i>
-                                            </a>
-                                        @endif
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -143,19 +130,6 @@
                                         </div>
                                     @endif
 
-                                    <div class="mt-3">
-                                        @if ($siswa->email)
-                                            <a href="mailto:{{ $siswa->email }}"
-                                                class="mb-1 btn btn-outline-primary btn-sm me-1">
-                                                <i class="bi bi-envelope"></i>
-                                            </a>
-                                        @endif
-                                        @if ($siswa->phone)
-                                            <a href="tel:{{ $siswa->phone }}" class="mb-1 btn btn-outline-success btn-sm">
-                                                <i class="bi bi-telephone"></i>
-                                            </a>
-                                        @endif
-                                    </div>
                                 </div>
                             </div>
                         </div>
