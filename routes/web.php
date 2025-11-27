@@ -12,6 +12,8 @@ Route::get('/fasilitas', [PageController::class, 'facilities'])->name('facilitie
 Route::get('/guru', [PageController::class, 'teachers'])->name('teachers');
 Route::get('/siswa', [PageController::class, 'students'])->name('students');
 Route::get('/berita', [PageController::class, 'news'])->name('news');
+Route::get('/berita/{post}', [PageController::class, 'showPost'])->name('posts.show');
 Route::get('/kegiatan', [PageController::class, 'events'])->name('events');
 Route::get('/jurusan', [PageController::class, 'majors'])->name('majors');
 Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
+Route::get('/cari', [PageController::class, 'search'])->name('search');

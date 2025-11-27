@@ -4,8 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section"
-        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 100px 0;">
+    <section class="hero-primary">
         <div class="container">
             <div class="row align-items-center">
                 <div class="mx-auto text-center col-lg-8">
@@ -40,14 +39,14 @@
                             </div>
 
                             <div class="mb-3">
-                                <h6><i class="bi bi-geo-alt text-success me-2"></i>Alamat</h6>
+                                <h6><i class="bi bi-geo-alt text-secondary-custom me-2"></i>Alamat</h6>
                                 <p class="mb-0">
                                     {{ $settings['school_address'] ?? 'Jl. Pendidikan No. 123, Jakarta Pusat, DKI Jakarta 10110' }}
                                 </p>
                             </div>
 
                             <div class="mb-3">
-                                <h6><i class="bi bi-telephone text-info me-2"></i>Telepon</h6>
+                                <h6><i class="bi bi-telephone text-accent-custom me-2"></i>Telepon</h6>
                                 <p class="mb-1">{{ $settings['school_phone'] ?? '+62 21 1234 5678' }}</p>
                                 @if ($settings['school_phone'] ?? false)
                                     <a href="tel:{{ $settings['school_phone'] }}" class="btn btn-outline-primary btn-sm">
@@ -57,10 +56,11 @@
                             </div>
 
                             <div class="mb-3">
-                                <h6><i class="bi bi-envelope text-warning me-2"></i>Email</h6>
+                                <h6><i class="bi bi-envelope text-accent-custom me-2"></i>Email</h6>
                                 <p class="mb-1">{{ $settings['school_email'] ?? 'info@sman1-indonesia.sch.id' }}</p>
                                 @if ($settings['school_email'] ?? false)
-                                    <a href="mailto:{{ $settings['school_email'] }}" class="btn btn-outline-success btn-sm">
+                                    <a href="mailto:{{ $settings['school_email'] }}"
+                                        class="btn btn-outline-secondary btn-sm">
                                         <i class="bi bi-envelope me-1"></i>Kirim Email
                                     </a>
                                 @endif
@@ -152,7 +152,7 @@
         <div class="container">
             <div class="row">
                 <div class="mb-4 text-center col-12">
-                    <h2>Lokasi Sekolah</h2>
+                    <h2 class="section-title">Lokasi Sekolah</h2>
                     <p class="text-muted">Temukan kami di peta</p>
                 </div>
                 <div class="mx-auto col-lg-10">
@@ -180,7 +180,7 @@
         <div class="container">
             <div class="row">
                 <div class="mb-5 text-center col-12">
-                    <h2>Kontak Cepat</h2>
+                    <h2 class="section-title">Kontak Cepat</h2>
                     <p class="lead">Butuh informasi segera? Hubungi kami melalui berbagai cara</p>
                 </div>
             </div>
@@ -188,7 +188,7 @@
                 <div class="mb-4 col-md-3">
                     <div class="text-center border-0 shadow card h-100">
                         <div class="p-4 card-body">
-                            <i class="mb-3 bi bi-telephone fs-1 text-primary"></i>
+                            <i class="mb-3 bi bi-telephone fs-1 text-primary-custom"></i>
                             <h5>Telepon</h5>
                             <p>Hubungi kami langsung untuk informasi cepat</p>
                             @if ($settings['school_phone'] ?? false)
@@ -200,11 +200,11 @@
                 <div class="mb-4 col-md-3">
                     <div class="text-center border-0 shadow card h-100">
                         <div class="p-4 card-body">
-                            <i class="mb-3 bi bi-envelope fs-1 text-success"></i>
+                            <i class="mb-3 bi bi-envelope fs-1 text-secondary-custom"></i>
                             <h5>Email</h5>
                             <p>Kirim email untuk pertanyaan detail</p>
                             @if ($settings['school_email'] ?? false)
-                                <a href="mailto:{{ $settings['school_email'] }}" class="btn btn-success">Email</a>
+                                <a href="mailto:{{ $settings['school_email'] }}" class="btn btn-secondary">Email</a>
                             @endif
                         </div>
                     </div>
@@ -212,12 +212,12 @@
                 <div class="mb-4 col-md-3">
                     <div class="text-center border-0 shadow card h-100">
                         <div class="p-4 card-body">
-                            <i class="mb-3 bi bi-whatsapp fs-1 text-success"></i>
+                            <i class="mb-3 bi bi-whatsapp fs-1 text-secondary-custom"></i>
                             <h5>WhatsApp</h5>
                             <p>Chat langsung via WhatsApp</p>
                             @if ($settings['school_phone'] ?? false)
                                 <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $settings['school_phone']) }}"
-                                    target="_blank" class="btn btn-success">WhatsApp</a>
+                                    target="_blank" class="btn btn-secondary">WhatsApp</a>
                             @endif
                         </div>
                     </div>
@@ -225,10 +225,10 @@
                 <div class="mb-4 col-md-3">
                     <div class="text-center border-0 shadow card h-100">
                         <div class="p-4 card-body">
-                            <i class="mb-3 bi bi-geo-alt fs-1 text-info"></i>
+                            <i class="mb-3 bi bi-geo-alt fs-1 text-accent-custom"></i>
                             <h5>Lokasi</h5>
                             <p>Kunjungi kami langsung di sekolah</p>
-                            <button class="btn btn-info"
+                            <button class="btn btn-accent"
                                 onclick="alert('Lokasi: {{ $settings['school_address'] ?? 'Alamat belum diatur' }}')">Lihat
                                 Lokasi</button>
                         </div>

@@ -4,8 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section"
-        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 100px 0;">
+    <section class="hero-primary">
         <div class="container">
             <div class="row align-items-center">
                 <div class="mx-auto text-center col-lg-8">
@@ -69,12 +68,13 @@
         <div class="container">
             <div class="row">
                 <div class="mx-auto col-lg-8">
-                    <h2 class="mb-5 text-center">Informasi Sekolah</h2>
+                    <h2 class="text-center section-title">Informasi Sekolah</h2>
                     <div class="row">
                         <div class="mb-4 col-md-6">
                             <div class="border-0 shadow-sm card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-building me-2 text-primary"></i>Nama Sekolah</h5>
+                                    <h5 class="card-title"><i class="bi bi-building me-2 text-primary-custom"></i>Nama
+                                        Sekolah</h5>
                                     <p class="card-text">{{ $settings['school_name'] ?? 'SMA Negeri 1 Indonesia' }}</p>
                                 </div>
                             </div>
@@ -82,7 +82,8 @@
                         <div class="mb-4 col-md-6">
                             <div class="border-0 shadow-sm card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-geo-alt me-2 text-success"></i>Alamat</h5>
+                                    <h5 class="card-title"><i class="bi bi-geo-alt me-2 text-secondary-custom"></i>Alamat
+                                    </h5>
                                     <p class="card-text">
                                         {{ $settings['school_address'] ?? 'Jl. Pendidikan No. 123, Jakarta Pusat' }}</p>
                                 </div>
@@ -91,7 +92,8 @@
                         <div class="mb-4 col-md-6">
                             <div class="border-0 shadow-sm card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-telephone me-2 text-info"></i>Telepon</h5>
+                                    <h5 class="card-title"><i class="bi bi-telephone me-2 text-accent-custom"></i>Telepon
+                                    </h5>
                                     <p class="card-text">{{ $settings['school_phone'] ?? '+62 21 1234 5678' }}</p>
                                 </div>
                             </div>
@@ -99,7 +101,7 @@
                         <div class="mb-4 col-md-6">
                             <div class="border-0 shadow-sm card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-envelope me-2 text-warning"></i>Email</h5>
+                                    <h5 class="card-title"><i class="bi bi-envelope me-2 text-accent-custom"></i>Email</h5>
                                     <p class="card-text">{{ $settings['school_email'] ?? 'info@sman1-indonesia.sch.id' }}
                                     </p>
                                 </div>
@@ -116,7 +118,7 @@
         <div class="container">
             <div class="row">
                 <div class="mx-auto col-lg-10">
-                    <h2 class="mb-4 text-center">Deskripsi Lengkap</h2>
+                    <h2 class="text-center section-title">Deskripsi Lengkap</h2>
                     <div class="border-0 shadow card">
                         <div class="p-4 card-body">
                             <p class="lead">

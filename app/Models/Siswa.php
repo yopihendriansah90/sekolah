@@ -18,6 +18,12 @@ class Siswa extends Model implements HasMedia
         'jurusan_id',
         'email',
         'phone',
+        'achievement_title',
+        'achievement_description',
+        'competition_name',
+        'achievement_level',
+        'achievement_year',
+        'achievement_category',
     ];
 
     public function registerMediaCollections(): void

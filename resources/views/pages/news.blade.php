@@ -4,8 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section"
-        style="background: linear-gradient(135deg, #FF6B6B 0%, #ee5a24 100%); color: white; padding: 100px 0;">
+    <section class="hero-primary">
         <div class="container">
             <div class="row align-items-center">
                 <div class="mx-auto text-center col-lg-8">
@@ -30,37 +29,45 @@
                 <div class="row">
                     @foreach ($posts as $post)
                         <div class="mb-4 col-md-6 col-lg-4">
-                            <div class="border-0 shadow card h-100 card-hover">
-                                @if ($post->getFirstMediaUrl('images'))
-                                    <img src="{{ $post->getFirstMediaUrl('images') }}" class="card-img-top"
-                                        alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
-                                @else
-                                    <div class="text-white card-img-top bg-secondary d-flex align-items-center justify-content-center"
-                                        style="height: 200px;">
-                                        <i class="bi bi-newspaper fs-1"></i>
-                                    </div>
-                                @endif
-                                <div class="card-body">
-                                    <h6 class="card-title fw-bold">{{ $post->title }}</h6>
-                                    <p class="card-text text-muted small">{{ Str::limit(strip_tags($post->body), 120) }}</p>
-                                    <div class="mt-3 d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i
-                                                class="bi bi-calendar me-1"></i>{{ $post->published_at ? $post->published_at->format('d/m/Y') : $post->created_at->format('d/m/Y') }}
-                                        </small>
-                                        @if ($post->author)
-                                            <small class="text-primary">
-                                                <i class="bi bi-person me-1"></i>{{ $post->author->name }}
-                                            </small>
-                                        @endif
-                                    </div>
-                                    @if ($post->category)
-                                        <div class="mt-2">
-                                            <span class="badge bg-primary">{{ $post->category }}</span>
+                            <a href="{{ route('posts.show', $post->slug) }}" class="text-decoration-none">
+                                <div class="border-0 shadow card h-100 card-hover">
+                                    @if ($post->getFirstMediaUrl('cover'))
+                                        <img src="{{ $post->getFirstMediaUrl('cover') }}" class="card-img-top"
+                                            alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
+                                    @else
+                                        <div class="text-white card-img-top bg-secondary d-flex align-items-center justify-content-center"
+                                            style="height: 200px;">
+                                            <i class="bi bi-newspaper fs-1"></i>
                                         </div>
                                     @endif
+                                    <div class="card-body">
+                                        <h6 class="card-title fw-bold text-dark">{{ $post->title }}</h6>
+                                        <p class="card-text text-muted small">{{ Str::limit(strip_tags($post->body), 120) }}
+                                        </p>
+                                        <div class="mt-3 d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">
+                                                <i
+                                                    class="bi bi-calendar me-1"></i>{{ $post->published_at ? $post->published_at->format('d/m/Y') : $post->created_at->format('d/m/Y') }}
+                                            </small>
+                                            @if ($post->author)
+                                                <small class="text-primary">
+                                                    <i class="bi bi-person me-1"></i>{{ $post->author->name }}
+                                                </small>
+                                            @endif
+                                        </div>
+                                        @if ($post->category)
+                                            <div class="mt-2">
+                                                <span class="badge bg-primary">{{ $post->category }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="bg-transparent border-0 card-footer">
+                                        <small class="text-primary fw-medium">
+                                            <i class="bi bi-arrow-right me-1"></i>Baca Selengkapnya
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -92,7 +99,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-primary">{{ $posts->total() }}</h2>
+                                <h2 class="text-primary-custom">{{ $posts->total() }}</h2>
                                 <p class="mb-0 text-muted">Total Berita</p>
                             </div>
                         </div>
@@ -100,7 +107,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-success">
+                                <h2 class="text-secondary-custom">
                                     {{ $posts->where('published_at', '>=', now()->startOfMonth())->count() }}</h2>
                                 <p class="mb-0 text-muted">Bulan Ini</p>
                             </div>
@@ -109,7 +116,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-info">
+                                <h2 class="text-accent-custom">
                                     {{ $posts->where('author_id', '!=', null)->unique('author_id')->count() }}</h2>
                                 <p class="mb-0 text-muted">Penulis</p>
                             </div>
@@ -118,7 +125,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-warning">
+                                <h2 class="text-accent-custom">
                                     {{ $posts->where('category', '!=', null)->unique('category')->count() }}</h2>
                                 <p class="mb-0 text-muted">Kategori</p>
                             </div>
@@ -134,7 +141,7 @@
         <div class="container">
             <div class="row">
                 <div class="mx-auto text-center col-lg-8">
-                    <h2 class="mb-4">Dapatkan Update Terbaru</h2>
+                    <h2 class="section-title">Dapatkan Update Terbaru</h2>
                     <p class="mb-4 lead">Berlangganan newsletter kami untuk mendapatkan informasi terbaru tentang kegiatan
                         sekolah</p>
                     <div class="border-0 shadow card">

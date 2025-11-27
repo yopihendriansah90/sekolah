@@ -16,14 +16,14 @@
     <!-- Custom CSS -->
     <style>
         :root {
-            --primary-blue: #2563eb;
-            --secondary-red: #dc2626;
-            --accent-yellow: #f59e0b;
+            --primary-blue: #1e40af;
+            --secondary-red: #ea580c;
+            --accent-yellow: #7c3aed;
             --light-blue: #dbeafe;
-            --light-red: #fef2f2;
-            --light-yellow: #fefce8;
-            --dark-blue: #1e40af;
-            --dark-red: #b91c1c;
+            --light-red: #fed7aa;
+            --light-yellow: #ede9fe;
+            --dark-blue: #1e3a8a;
+            --dark-red: #c2410c;
             --warm-gray: #f8fafc;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
@@ -63,8 +63,8 @@
         }
 
         .hero-accent {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #d97706 100%);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #5b21b6 100%);
+            color: white;
             padding: 100px 0;
         }
 
@@ -238,22 +238,22 @@
 
         .btn-secondary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.3);
         }
 
         .btn-accent {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #d97706 100%);
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #5b21b6 100%);
             border: none;
             border-radius: 25px;
             padding: 12px 30px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: white;
             transition: all 0.3s ease;
         }
 
         .btn-accent:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
         }
 
         /* Statistics Cards */
@@ -270,8 +270,8 @@
         }
 
         .stats-card-accent {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #d97706 100%);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #5b21b6 100%);
+            color: white;
             border-radius: 15px;
         }
 
@@ -296,7 +296,7 @@
         }
 
         .achievement-icon-accent {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #d97706 100%);
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #5b21b6 100%);
         }
 
         /* Section Titles */
@@ -315,7 +315,7 @@
             transform: translateX(-50%);
             width: 60px;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-yellow) 50%, var(--secondary-red) 100%);
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-red) 50%, var(--accent-yellow) 100%);
             border-radius: 2px;
         }
 
@@ -356,7 +356,7 @@
         }
 
         .footer a:hover {
-            color: var(--accent-yellow);
+            color: var(--secondary-red);
         }
 
         /* Social Links */
@@ -369,7 +369,7 @@
         }
 
         .social-links a:hover {
-            color: var(--accent-yellow);
+            color: var(--secondary-red);
             transform: translateY(-3px);
         }
 
@@ -396,8 +396,8 @@
         }
 
         .badge-accent {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #d97706 100%);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #5b21b6 100%);
+            color: white;
         }
 
         /* Utility Classes */
@@ -557,6 +557,30 @@
             }
         }
 
+        /* Search Form Styles */
+        .navbar .input-group .form-control {
+            border-radius: 25px 0 0 25px;
+            border: 2px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .navbar .input-group .btn {
+            border-radius: 0 25px 25px 0;
+            border: 2px solid #e2e8f0;
+            border-left: none;
+        }
+
+        .navbar .input-group .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+        }
+
+        .navbar .input-group .btn:hover {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+        }
+
         /* Mobile Navbar Layout Fix */
         @media (max-width: 991.98px) {
             .navbar {
@@ -600,6 +624,25 @@
             .navbar-toggler-icon {
                 width: 1rem;
                 height: 1rem;
+            }
+
+            /* Hide search form on mobile, show in navbar collapse */
+            .navbar .d-flex.ms-3 {
+                display: none !important;
+            }
+
+            .navbar-collapse .d-flex {
+                margin-top: 1rem;
+                margin-left: 0 !important;
+                width: 100%;
+            }
+
+            .navbar-collapse .input-group {
+                width: 100%;
+            }
+
+            .navbar-collapse .form-control {
+                min-width: auto !important;
             }
 
             /* Ensure navbar header stays horizontal */
@@ -674,7 +717,6 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -718,6 +760,29 @@
                             href="{{ route('contact') }}">Kontak</a>
                     </li>
                 </ul>
+
+                <!-- Search Form (Desktop) -->
+                <form class="d-flex ms-3 d-none d-lg-flex" action="{{ route('search') }}" method="GET"
+                    role="search">
+                    <div class="input-group">
+                        <input class="form-control border-end-0" type="search" name="q" placeholder="Cari..."
+                            aria-label="Search" value="{{ request('q') }}" style="min-width: 200px;">
+                        <button class="btn btn-outline-secondary border-start-0" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Search Form (Mobile) -->
+                <form class="mt-3 d-flex d-lg-none" action="{{ route('search') }}" method="GET" role="search">
+                    <div class="input-group w-100">
+                        <input class="form-control border-end-0" type="search" name="q" placeholder="Cari..."
+                            aria-label="Search" value="{{ request('q') }}">
+                        <button class="btn btn-outline-secondary border-start-0" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </nav>
@@ -913,6 +978,46 @@
     </script>
 
     @stack('scripts')
+
+    <!-- Custom Hero Video Script -->
+    <script>
+        function toggleVideoMute(button) {
+            const video = document.querySelector('.hero-video-background');
+            const icon = button.querySelector('i');
+
+            if (video) {
+                if (video.muted) {
+                    video.muted = false;
+                    icon.className = 'bi bi-volume-up';
+                    button.title = 'Mute Sound';
+                } else {
+                    video.muted = true;
+                    icon.className = 'bi bi-volume-mute';
+                    button.title = 'Unmute Sound';
+                }
+            }
+        }
+
+        // Auto-hide video control button after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoBtn = document.querySelector('.video-control-btn');
+            if (videoBtn) {
+                setTimeout(function() {
+                    videoBtn.style.opacity = '0.3';
+                }, 3000);
+
+                videoBtn.addEventListener('mouseenter', function() {
+                    this.style.opacity = '1';
+                });
+
+                videoBtn.addEventListener('mouseleave', function() {
+                    setTimeout(() => {
+                        this.style.opacity = '0.3';
+                    }, 2000);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

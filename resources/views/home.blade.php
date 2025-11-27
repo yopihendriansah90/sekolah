@@ -3,22 +3,109 @@
 @section('title', ($settings['school_name'] ?? 'Sekolah Indonesia') . ' - Profil Sekolah')
 
 @section('content')
-    <!-- Hero Section -->
-    <section id="home" class="hero-primary">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="mb-4 display-4 fw-bold">Selamat Datang
-                        di<br>{{ $settings['school_name'] ?? 'Sekolah Indonesia' }}</h1>
-                    <p class="mb-4 lead">
-                        {{ $settings['school_description'] ?? 'Sekolah berkualitas dengan pendidikan terbaik untuk masa depan siswa.' }}
-                    </p>
-                    <a href="{{ route('about') }}" class="btn btn-light btn-lg me-3">Pelajari Lebih Lanjut</a>
-                    <a href="{{ route('contact') }}" class="btn btn-outline-light btn-lg">Hubungi Kami</a>
+    <!-- Hero Section with Video Background & Enhanced CTA -->
+    <section id="home" class="hero-section">
+        @php
+            $heroVideoUrl = $settings['hero_video_url'] ?? null;
+            $featuredEvents = $events
+                ->filter(function ($event) {
+                    return $event->getFirstMediaUrl('images');
+                })
+                ->take(5);
+        @endphp
+
+        <!-- Video Background (Priority 1) -->
+        @if ($heroVideoUrl)
+            <video class="hero-video-background" autoplay muted loop playsinline>
+                <source src="{{ $heroVideoUrl }}" type="video/mp4">
+                <!-- Fallback to image if video fails -->
+                <div class="hero-image-background" style="background-image: url('{{ asset('images/school-hero.jpg') }}');">
                 </div>
-                <div class="col-lg-6">
-                    <img src="{{ asset('images/school-hero.jpg') }}" alt="Sekolah" class="rounded shadow img-fluid"
-                        onerror="this.src='https://via.placeholder.com/600x400/2563eb/white?text=Sekolah'">
+            </video>
+
+            <!-- Video Control Button -->
+            <button class="video-control-btn" onclick="toggleVideoMute(this)" title="Toggle Sound">
+                <i class="bi bi-volume-mute"></i>
+            </button>
+        @elseif($featuredEvents->count() > 0)
+            <!-- Event Image Carousel (Priority 2) -->
+            <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner">
+                    @foreach ($featuredEvents as $index => $event)
+                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                            <div class="hero-carousel-item"
+                                style="background-image: url('{{ $event->getFirstMediaUrl('images') }}');" role="img"
+                                aria-label="Gambar acara sekolah: {{ $event->title }}"></div>
+                        </div>
+                    @endforeach
+                </div>
+
+                @if ($featuredEvents->count() > 1)
+                    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+
+                    <div class="carousel-indicators">
+                        @foreach ($featuredEvents as $index => $event)
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}"
+                                class="{{ $index == 0 ? 'active' : '' }}"
+                                aria-current="{{ $index == 0 ? 'true' : 'false' }}"
+                                aria-label="Slide {{ $index + 1 }}"></button>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        @else
+            <!-- Default Image Background (Priority 3) -->
+            <div class="hero-image-background" style="background-image: url('{{ asset('images/school-hero.jpg') }}');">
+            </div>
+        @endif
+
+        <!-- Hero Overlay with Content -->
+        <div class="hero-overlay">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 hero-content">
+                        <h1 class="mb-4 display-4 fw-bold">Selamat Datang
+                            di<br><span class="text-warning">{{ $settings['school_name'] ?? 'Sekolah Indonesia' }}</span>
+                        </h1>
+                        <p class="mb-4 lead fs-5">
+                            {{ $settings['school_description'] ?? 'Sekolah berkualitas dengan pendidikan terbaik untuk masa depan siswa.' }}
+                        </p>
+
+                        <!-- Enhanced CTA Buttons -->
+                        <div class="hero-cta-buttons">
+                            <a href="#tentang" class="px-4 py-3 mb-3 btn btn-primary btn-lg me-3">
+                                <i class="bi bi-info-circle me-2"></i>Pelajari Lebih Lanjut
+                            </a>
+                            <a href="{{ route('contact') }}" class="px-4 py-3 mb-3 btn btn-outline-light btn-lg me-3">
+                                <i class="bi bi-telephone me-2"></i>Hubungi Kami
+                            </a>
+                            <a href="#fasilitas" class="px-4 py-3 mb-3 btn btn-outline-light btn-lg">
+                                <i class="bi bi-building me-2"></i>Lihat Fasilitas
+                            </a>
+                        </div>
+
+                        <!-- Trust Signals -->
+                        <div class="flex-wrap mt-4 d-flex justify-content-center">
+                            <span class="px-3 py-2 mb-2 badge bg-light text-primary me-3">
+                                <i class="bi bi-award me-1"></i>Terakreditasi A
+                            </span>
+                            <span class="px-3 py-2 mb-2 badge bg-light text-success me-3">
+                                <i class="bi bi-mortarboard me-1"></i>{{ $siswas->count() ?? '500' }} Siswa
+                            </span>
+                            <span class="px-3 py-2 mb-2 badge bg-light text-warning me-3">
+                                <i class="bi bi-star me-1"></i>Sekolah Unggulan
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,7 +124,8 @@
                             @else stats-card-accent @endif">
                             <div class="p-4 card-body">
                                 @if ($pencapaian->getFirstMediaUrl('icons'))
-                                    <img src="{{ $pencapaian->getFirstMediaUrl('icons') }}" alt="{{ $pencapaian->metric }}"
+                                    <img src="{{ $pencapaian->getFirstMediaUrl('icons') }}"
+                                        alt="{{ $pencapaian->metric }}"
                                         class="p-2 mb-3 bg-white achievement-icon rounded-circle">
                                 @else
                                     <div
@@ -274,32 +362,40 @@
             <div class="row">
                 @forelse($posts as $post)
                     <div class="mb-4 col-md-6 col-lg-4">
-                        <div class="border-0 shadow card h-100 card-hover">
-                            @if ($post->getFirstMediaUrl('images'))
-                                <img src="{{ $post->getFirstMediaUrl('images') }}" class="card-img-top"
-                                    alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
-                            @else
-                                <div class="text-white card-img-top bg-secondary d-flex align-items-center justify-content-center"
-                                    style="height: 200px;">
-                                    <i class="bi bi-newspaper fs-1"></i>
-                                </div>
-                            @endif
-                            <div class="card-body">
-                                <h6 class="card-title">{{ $post->title }}</h6>
-                                <p class="card-text text-muted small">{{ Str::limit(strip_tags($post->body), 100) }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        <i
-                                            class="bi bi-calendar me-1"></i>{{ $post->published_at ? $post->published_at->format('d/m/Y') : $post->created_at->format('d/m/Y') }}
-                                    </small>
-                                    @if ($post->author)
-                                        <small class="text-primary">
-                                            <i class="bi bi-person me-1"></i>{{ $post->author->name }}
+                        <a href="{{ route('posts.show', $post->slug) }}" class="text-decoration-none">
+                            <div class="border-0 shadow card h-100 card-hover">
+                                @if ($post->getFirstMediaUrl('cover'))
+                                    <img src="{{ $post->getFirstMediaUrl('cover') }}" class="card-img-top"
+                                        alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
+                                @else
+                                    <div class="text-white card-img-top bg-secondary d-flex align-items-center justify-content-center"
+                                        style="height: 200px;">
+                                        <i class="bi bi-newspaper fs-1"></i>
+                                    </div>
+                                @endif
+                                <div class="card-body">
+                                    <h6 class="card-title text-dark">{{ $post->title }}</h6>
+                                    <p class="card-text text-muted small">{{ Str::limit(strip_tags($post->body), 100) }}
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i
+                                                class="bi bi-calendar me-1"></i>{{ $post->published_at ? $post->published_at->format('d/m/Y') : $post->created_at->format('d/m/Y') }}
                                         </small>
-                                    @endif
+                                        @if ($post->author)
+                                            <small class="text-primary">
+                                                <i class="bi bi-person me-1"></i>{{ $post->author->name }}
+                                            </small>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="bg-transparent border-0 card-footer">
+                                    <small class="text-primary fw-medium">
+                                        <i class="bi bi-arrow-right me-1"></i>Baca Selengkapnya
+                                    </small>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 @empty
                     <div class="text-center col-12">

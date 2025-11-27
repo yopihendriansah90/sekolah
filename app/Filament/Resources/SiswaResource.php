@@ -116,6 +116,71 @@ class SiswaResource extends Resource
                             ->directory('siswa/photos')
                             ->visibility('public'),
                     ]),
+
+                Section::make('Prestasi & Penghargaan')
+                    ->description('Data prestasi dan penghargaan siswa')
+                    ->icon('heroicon-o-trophy')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('achievement_title')
+                                    ->label('Judul Prestasi')
+                                    ->maxLength(255)
+                                    ->placeholder('Juara 1 Lomba Matematika')
+                                    ->helperText('Judul/nama prestasi yang diraih')
+                                    ->columnSpan(1),
+                                Select::make('achievement_category')
+                                    ->label('Kategori Prestasi')
+                                    ->options([
+                                        'akademik' => 'Akademik',
+                                        'olahraga' => 'Olahraga',
+                                        'seni' => 'Seni & Budaya',
+                                        'teknologi' => 'Teknologi',
+                                        'bahasa' => 'Bahasa',
+                                        'sains' => 'Sains',
+                                        'sosial' => 'Sosial & Humaniora',
+                                        'lainnya' => 'Lainnya',
+                                    ])
+                                    ->placeholder('Pilih kategori prestasi')
+                                    ->helperText('Kategori bidang prestasi')
+                                    ->columnSpan(1),
+                            ]),
+                        TextInput::make('competition_name')
+                            ->label('Nama Kejuaraan/Lomba')
+                            ->maxLength(255)
+                            ->placeholder('Olimpiade Matematika Tingkat Kabupaten')
+                            ->helperText('Nama event/kejuaraan/lomba yang diikuti'),
+                        Grid::make(2)
+                            ->schema([
+                                Select::make('achievement_level')
+                                    ->label('Tingkat Kejuaraan')
+                                    ->options([
+                                        'sekolah' => 'Sekolah',
+                                        'kecamatan' => 'Kecamatan',
+                                        'kabupaten' => 'Kabupaten/Kota',
+                                        'provinsi' => 'Provinsi',
+                                        'nasional' => 'Nasional',
+                                        'internasional' => 'Internasional',
+                                    ])
+                                    ->placeholder('Pilih tingkat kejuaraan')
+                                    ->helperText('Tingkat kompetisi yang diikuti')
+                                    ->columnSpan(1),
+                                TextInput::make('achievement_year')
+                                    ->label('Tahun Prestasi')
+                                    ->numeric()
+                                    ->minValue(2000)
+                                    ->maxValue(date('Y') + 1)
+                                    ->placeholder(date('Y'))
+                                    ->helperText('Tahun meraih prestasi')
+                                    ->columnSpan(1),
+                            ]),
+                        \Filament\Forms\Components\Textarea::make('achievement_description')
+                            ->label('Deskripsi Prestasi')
+                            ->rows(3)
+                            ->maxLength(1000)
+                            ->placeholder('Jelaskan detail prestasi yang diraih, proses, dan pencapaian...')
+                            ->helperText('Deskripsi lengkap tentang prestasi yang diraih'),
+                    ]),
             ]);
     }
 
@@ -162,6 +227,35 @@ class SiswaResource extends Resource
                     ->label('Telepon')
                     ->icon('heroicon-o-device-phone-mobile')
                     ->placeholder('Tidak ada nomor telepon'),
+                TextColumn::make('achievement_title')
+                    ->label('Prestasi')
+                    ->searchable()
+                    ->placeholder('Belum ada prestasi')
+                    ->icon('heroicon-o-trophy')
+                    ->color('warning')
+                    ->limit(30),
+                TextColumn::make('achievement_level')
+                    ->label('Tingkat')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'sekolah' => 'gray',
+                        'kecamatan' => 'green',
+                        'kabupaten' => 'blue',
+                        'provinsi' => 'purple',
+                        'nasional' => 'orange',
+                        'internasional' => 'red',
+                        default => 'gray',
+                    })
+                    ->placeholder('Belum ada'),
+                TextColumn::make('achievement_year')
+                    ->label('Tahun')
+                    ->sortable()
+                    ->placeholder('Belum ada'),
+                TextColumn::make('achievement_category')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color('success')
+                    ->placeholder('Belum ada'),
                 TextColumn::make('created_at')
                     ->label('Bergabung')
                     ->dateTime('d/m/Y')

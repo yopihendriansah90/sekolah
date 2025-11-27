@@ -39,6 +39,11 @@ class Post extends Model implements HasMedia
         $this->addMediaCollection('cover');
     }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     protected static function boot()
     {
         parent::boot();

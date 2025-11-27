@@ -4,8 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section"
-        style="background: linear-gradient(135deg, #FF6B6B 0%, #ee5a24 100%); color: white; padding: 100px 0;">
+    <section class="hero-primary">
         <div class="container">
             <div class="row align-items-center">
                 <div class="mx-auto text-center col-lg-8">
@@ -91,7 +90,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-primary">{{ $gurus->total() }}</h2>
+                                <h2 class="text-primary-custom">{{ $gurus->total() }}</h2>
                                 <p class="mb-0 text-muted">Total Guru</p>
                             </div>
                         </div>
@@ -99,7 +98,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-success">
+                                <h2 class="text-secondary-custom">
                                     {{ $gurus->where('subject', '!=', null)->unique('subject')->count() }}</h2>
                                 <p class="mb-0 text-muted">Mata Pelajaran</p>
                             </div>
@@ -108,7 +107,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-info">{{ $gurus->where('email', '!=', null)->count() }}</h2>
+                                <h2 class="text-accent-custom">{{ $gurus->where('email', '!=', null)->count() }}</h2>
                                 <p class="mb-0 text-muted">Dengan Email</p>
                             </div>
                         </div>
@@ -116,7 +115,7 @@
                     <div class="mb-4 col-md-3">
                         <div class="border-0 shadow-sm card">
                             <div class="card-body">
-                                <h2 class="text-warning">{{ $gurus->where('phone', '!=', null)->count() }}</h2>
+                                <h2 class="text-accent-custom">{{ $gurus->where('phone', '!=', null)->count() }}</h2>
                                 <p class="mb-0 text-muted">Dengan Telepon</p>
                             </div>
                         </div>
@@ -131,25 +130,25 @@
         <div class="container">
             <div class="row">
                 <div class="mx-auto col-lg-10">
-                    <h2 class="mb-4 text-center">Komitmen Kami</h2>
+                    <h2 class="text-center section-title">Komitmen Kami</h2>
                     <div class="row">
                         <div class="mb-4 col-md-4">
                             <div class="text-center">
-                                <i class="mb-3 bi bi-book text-primary fs-1"></i>
+                                <i class="mb-3 bi bi-book text-primary-custom fs-1"></i>
                                 <h5>Pendidikan Berkualitas</h5>
                                 <p>Menyampaikan materi pelajaran dengan metode yang efektif dan menarik.</p>
                             </div>
                         </div>
                         <div class="mb-4 col-md-4">
                             <div class="text-center">
-                                <i class="mb-3 bi bi-heart text-danger fs-1"></i>
+                                <i class="mb-3 bi bi-heart text-secondary-custom fs-1"></i>
                                 <h5>Pengembangan Karakter</h5>
                                 <p>Membentuk karakter siswa yang baik dan nilai-nilai moral yang tinggi.</p>
                             </div>
                         </div>
                         <div class="mb-4 col-md-4">
                             <div class="text-center">
-                                <i class="mb-3 bi bi-lightbulb text-warning fs-1"></i>
+                                <i class="mb-3 bi bi-lightbulb text-accent-custom fs-1"></i>
                                 <h5>Inovasi Pembelajaran</h5>
                                 <p>Menggunakan teknologi dan metode inovatif dalam proses pembelajaran.</p>
                             </div>

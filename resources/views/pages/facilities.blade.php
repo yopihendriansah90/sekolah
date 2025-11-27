@@ -4,8 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section"
-        style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; padding: 100px 0;">
+    <section class="hero-primary">
         <div class="container">
             <div class="row align-items-center">
                 <div class="mx-auto text-center col-lg-8">
@@ -73,25 +72,25 @@
         <div class="container">
             <div class="row">
                 <div class="mx-auto col-lg-10">
-                    <h2 class="mb-4 text-center">Mengapa Fasilitas Penting?</h2>
+                    <h2 class="text-center section-title">Mengapa Fasilitas Penting?</h2>
                     <div class="row">
                         <div class="mb-4 col-md-4">
                             <div class="text-center">
-                                <i class="mb-3 bi bi-lightbulb text-warning fs-1"></i>
+                                <i class="mb-3 bi bi-lightbulb text-accent-custom fs-1"></i>
                                 <h5>Pembelajaran Optimal</h5>
                                 <p>Fasilitas yang lengkap mendukung proses pembelajaran yang efektif dan menarik.</p>
                             </div>
                         </div>
                         <div class="mb-4 col-md-4">
                             <div class="text-center">
-                                <i class="mb-3 bi bi-shield-check text-success fs-1"></i>
+                                <i class="mb-3 bi bi-shield-check text-secondary-custom fs-1"></i>
                                 <h5>Keamanan & Kenyamanan</h5>
                                 <p>Lingkungan belajar yang aman dan nyaman untuk pengembangan siswa.</p>
                             </div>
                         </div>
                         <div class="mb-4 col-md-4">
                             <div class="text-center">
-                                <i class="mb-3 bi bi-trophy text-primary fs-1"></i>
+                                <i class="mb-3 bi bi-trophy text-primary-custom fs-1"></i>
                                 <h5>Pengembangan Bakat</h5>
                                 <p>Fasilitas pendukung untuk mengembangkan berbagai bakat dan minat siswa.</p>
                             </div>
