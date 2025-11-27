@@ -29,21 +29,27 @@
                 <div class="row">
                     @foreach ($jurusans as $jurusan)
                         <div class="mb-4 col-md-6 col-lg-4">
-                            <div class="border-0 shadow card h-100 card-hover">
-                                <div class="card-body">
-                                    <div class="mb-3 text-center">
-                                        <div class="mx-auto text-white bg-primary rounded-circle d-flex align-items-center justify-content-center"
-                                            style="width: 80px; height: 80px;">
-                                            <i class="bi bi-book fs-2"></i>
+                            <a href="{{ route('major.show', $jurusan->id) }}" class="text-decoration-none">
+                                <div class="border-0 shadow card h-100 card-hover">
+                                    <div class="card-body">
+                                        <div class="mb-3 text-center">
+                                            <div class="mx-auto text-white bg-primary rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 80px; height: 80px;">
+                                                <i class="bi bi-book fs-2"></i>
+                                            </div>
+                                        </div>
+                                        <h6 class="card-title fw-bold text-dark">{{ $jurusan->name }}</h6>
+                                        <p class="mb-2 card-text text-muted small">
+                                            {{ Str::limit($jurusan->description, 100) }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">{{ $jurusan->siswas_count }} Siswa</span>
+                                            <small class="text-primary">
+                                                <i class="bi bi-arrow-right me-1"></i>Lihat Detail
+                                            </small>
                                         </div>
                                     </div>
-                                    <h6 class="card-title fw-bold">{{ $jurusan->name }}</h6>
-                                    <p class="mb-3 text-muted small">{{ $jurusan->description }}</p>
-                                    <div class="text-center">
-                                        <span class="badge bg-primary">{{ $jurusan->siswas_count }} Siswa</span>
-                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>

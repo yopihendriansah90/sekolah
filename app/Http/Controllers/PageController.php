@@ -83,10 +83,53 @@ class PageController extends Controller
                 ->with('author')
                 ->get()
                 ->map(function ($post) {
+                    // Process content for search preview
+                    $content = $post->body;
+
+                    // Remove Trix attachments from search preview to avoid broken HTML
+                    $content = preg_replace('/<figure[^>]*data-trix-attachment[^>]*>.*?<\/figure>/s', '', $content);
+                    $content = preg_replace('/<img[^>]*src[^>]*>/s', '', $content);
+
+                    if (strlen(strip_tags($content)) > 150) {
+                        // Try to find a good breaking point
+                        $plainText = strip_tags($content);
+                        $truncatedText = Str::limit($plainText, 150);
+
+                        // If we have HTML, try to preserve structure up to similar length
+                        if (strlen($content) > strlen($plainText)) {
+                            // Find position in plain text and map back to HTML
+                            $breakPos = strlen($truncatedText) - 3; // Account for "..."
+                            $htmlPos = 0;
+                            $plainPos = 0;
+
+                            while ($htmlPos < strlen($content) && $plainPos < $breakPos) {
+                                if ($content[$htmlPos] === '<') {
+                                    // Skip HTML tags
+                                    while ($htmlPos < strlen($content) && $content[$htmlPos] !== '>') {
+                                        $htmlPos++;
+                                    }
+                                    $htmlPos++; // Skip the >
+                                } else {
+                                    $plainPos++;
+                                    $htmlPos++;
+                                }
+                            }
+
+                            // Find the end of current tag or word
+                            while ($htmlPos < strlen($content) && ! in_array($content[$htmlPos], [' ', '>', '</'])) {
+                                $htmlPos++;
+                            }
+
+                            $content = substr($content, 0, $htmlPos).'...';
+                        } else {
+                            $content = $truncatedText;
+                        }
+                    }
+
                     return (object) [
                         'id' => $post->id,
                         'title' => $post->title,
-                        'content' => Str::limit(strip_tags($post->body), 150),
+                        'content' => $content,
                         'type' => 'Berita',
                         'url' => route('posts.show', $post->slug),
                         'image' => $post->getFirstMediaUrl('cover'),
@@ -210,6 +253,15 @@ class PageController extends Controller
         $jurusans = Jurusan::withCount('siswas')->orderBy('name')->get();
 
         return view('pages.majors', compact('settings', 'jurusans'));
+    }
+
+    public function showMajor(Jurusan $jurusan)
+    {
+        $settings = Setting::pluck('value', 'key')->toArray();
+        $siswas = $jurusan->siswas()->with('jurusan')->paginate(12);
+        $gurus = Guru::where('subject', 'LIKE', '%'.$jurusan->name.'%')->get();
+
+        return view('pages.major-detail', compact('settings', 'jurusan', 'siswas', 'gurus'));
     }
 
     public function contact()

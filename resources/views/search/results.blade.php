@@ -96,7 +96,13 @@
                                             </div>
 
                                             <h6 class="card-title fw-bold text-dark">{{ $result->title }}</h6>
-                                            <p class="card-text text-muted small">{{ $result->content }}</p>
+                                            <div class="card-text text-muted small">
+                                                @if ($result->type == 'Berita')
+                                                    {!! $result->content !!}
+                                                @else
+                                                    {{ $result->content }}
+                                                @endif
+                                            </div>
 
                                             @if ($result->date)
                                                 <div class="mt-2">

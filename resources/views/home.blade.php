@@ -99,7 +99,9 @@
                                 <i class="bi bi-award me-1"></i>Terakreditasi A
                             </span>
                             <span class="px-3 py-2 mb-2 badge bg-light text-success me-3">
-                                <i class="bi bi-mortarboard me-1"></i>{{ $siswas->count() ?? '500' }} Siswa
+                                <i
+                                    class="bi bi-mortarboard me-1"></i>{{ $pencapaians->where('metric', 'Jumlah Siswa')->first()->value ?? '500' }}
+                                Siswa
                             </span>
                             <span class="px-3 py-2 mb-2 badge bg-light text-warning me-3">
                                 <i class="bi bi-star me-1"></i>Sekolah Unggulan
@@ -304,12 +306,17 @@
         <div class="container">
             <div class="row">
                 <div class="mb-5 text-center col-12">
-                    <h2 class="section-title">Siswa Berprestasi</h2>
-                    <p class="lead">Para siswa yang telah menunjukkan prestasi akademik dan non-akademik</p>
+                    <h2 class="section-title">Siswa Berprestasi Unggulan</h2>
+                    <p class="lead">Para siswa berbakat yang telah mengharumkan nama sekolah di berbagai kompetisi</p>
                 </div>
             </div>
             <div class="row">
-                @forelse($siswas->take(8) as $siswa)
+                @php
+                    $siswaBerprestasi = $siswas->filter(function ($siswa) {
+                        return !empty($siswa->achievement_title);
+                    });
+                @endphp
+                @forelse($siswaBerprestasi->take(8) as $siswa)
                     <div class="mb-4 col-md-6 col-lg-3">
                         <div class="text-center border-0 shadow card h-100 card-hover">
                             @if ($siswa->getFirstMediaUrl('photos'))
@@ -329,6 +336,13 @@
                                     <small class="badge bg-primary">{{ $siswa->jurusan->name }}</small>
                                 @endif
                                 <small class="mt-2 text-muted d-block">NIS: {{ $siswa->nis }}</small>
+                                @if ($siswa->achievement_title)
+                                    <div class="mt-2">
+                                        <small class="badge bg-warning text-dark">
+                                            <i class="bi bi-trophy-fill me-1"></i>{{ ucfirst($siswa->achievement_level) }}
+                                        </small>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -375,8 +389,9 @@
                                 @endif
                                 <div class="card-body">
                                     <h6 class="card-title text-dark">{{ $post->title }}</h6>
-                                    <p class="card-text text-muted small">{{ Str::limit(strip_tags($post->body), 100) }}
-                                    </p>
+                                    <div class="card-text text-muted small">
+                                        {!! Str::limit(strip_tags($post->body), 100) !!}
+                                    </div>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-muted">
                                             <i
@@ -482,24 +497,29 @@
             <div class="row">
                 @forelse($jurusans as $jurusan)
                     <div class="mb-4 col-md-6 col-lg-4">
-                        <div class="border-0 shadow card h-100 card-hover">
-                            @if ($jurusan->getFirstMediaUrl('images'))
-                                <img src="{{ $jurusan->getFirstMediaUrl('images') }}" class="card-img-top"
-                                    alt="{{ $jurusan->name }}" style="height: 200px; object-fit: cover;">
-                            @else
-                                <div class="text-white card-img-top bg-warning d-flex align-items-center justify-content-center"
-                                    style="height: 200px;">
-                                    <i class="bi bi-mortarboard fs-1"></i>
-                                </div>
-                            @endif
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $jurusan->name }}</h5>
-                                <p class="card-text">{{ Str::limit($jurusan->description, 120) }}</p>
-                                <div class="mt-3">
-                                    <span class="badge bg-primary">{{ $jurusan->siswas->count() }} Siswa</span>
+                        <a href="{{ route('major.show', $jurusan->id) }}" class="text-decoration-none">
+                            <div class="border-0 shadow card h-100 card-hover">
+                                @if ($jurusan->getFirstMediaUrl('images'))
+                                    <img src="{{ $jurusan->getFirstMediaUrl('images') }}" class="card-img-top"
+                                        alt="{{ $jurusan->name }}" style="height: 200px; object-fit: cover;">
+                                @else
+                                    <div class="text-white card-img-top bg-warning d-flex align-items-center justify-content-center"
+                                        style="height: 200px;">
+                                        <i class="bi bi-mortarboard fs-1"></i>
+                                    </div>
+                                @endif
+                                <div class="card-body">
+                                    <h5 class="card-title text-dark">{{ $jurusan->name }}</h5>
+                                    <p class="card-text text-muted">{{ Str::limit($jurusan->description, 120) }}</p>
+                                    <div class="mt-3 d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-primary">{{ $jurusan->siswas->count() }} Siswa</span>
+                                        <small class="text-primary">
+                                            <i class="bi bi-arrow-right me-1"></i>Lihat Detail
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 @empty
                     <div class="text-center col-12">
