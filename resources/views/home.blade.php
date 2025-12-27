@@ -85,10 +85,10 @@
                             <a href="#tentang" class="px-4 py-3 mb-3 btn btn-primary btn-lg me-3">
                                 <i class="bi bi-info-circle me-2"></i>Pelajari Lebih Lanjut
                             </a>
-                            <a href="{{ route('contact') }}" class="px-4 py-3 mb-3 btn btn-outline-light btn-lg me-3">
+                            <a href="{{ route('contact') }}" class="px-4 py-3 mb-3 btn btn-hero-secondary btn-lg me-3">
                                 <i class="bi bi-telephone me-2"></i>Hubungi Kami
                             </a>
-                            <a href="#fasilitas" class="px-4 py-3 mb-3 btn btn-outline-light btn-lg">
+                            <a href="#fasilitas" class="px-4 py-3 mb-3 btn btn-hero-secondary btn-lg">
                                 <i class="bi bi-building me-2"></i>Lihat Fasilitas
                             </a>
                         </div>

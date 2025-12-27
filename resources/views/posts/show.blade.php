@@ -74,7 +74,7 @@
 
                     <!-- Post Body -->
                     <div class="mb-5 post-content">
-                        {!! nl2br(e($post->body)) !!}
+                        {!! $post->body !!}
                     </div>
 
                     <!-- Share Buttons -->
@@ -93,8 +93,8 @@
                                 target="_blank" class="btn btn-outline-success">
                                 <i class="bi bi-whatsapp me-1"></i>WhatsApp
                             </a>
-                            <button
-                                onclick="navigator.share({title: '{{ $post->title }}', url: '{{ url()->current() }}'})"
+                            <button type="button"
+                                onclick="if (navigator.share) { navigator.share({title: '{{ $post->title }}', url: '{{ url()->current() }}'}); } else { window.alert('Browser tidak mendukung fitur berbagi.'); }"
                                 class="btn btn-outline-secondary">
                                 <i class="bi bi-share me-1"></i>Bagikan
                             </button>
@@ -107,13 +107,13 @@
                             <i class="bi bi-arrow-left me-1"></i>Kembali ke Berita
                         </a>
                         <div>
-                            @if ($previousPost = \App\Models\Post::where('is_published', true)->where('id', '<', $post->id)->orderBy('id', 'desc')->first())
+                            @if ($previousPost)
                                 <a href="{{ route('posts.show', $previousPost->slug) }}"
                                     class="btn btn-outline-secondary me-2">
                                     <i class="bi bi-chevron-left me-1"></i>Sebelumnya
                                 </a>
                             @endif
-                            @if ($nextPost = \App\Models\Post::where('is_published', true)->where('id', '>', $post->id)->orderBy('id', 'asc')->first())
+                            @if ($nextPost)
                                 <a href="{{ route('posts.show', $nextPost->slug) }}" class="btn btn-outline-secondary">
                                     Selanjutnya<i class="bi bi-chevron-right ms-1"></i>
                                 </a>
@@ -126,15 +126,6 @@
     </section>
 
     <!-- Related Posts -->
-    @php
-        $relatedPosts = \App\Models\Post::where('is_published', true)
-            ->where('id', '!=', $post->id)
-            ->where('category', $post->category)
-            ->orderBy('published_at', 'desc')
-            ->take(3)
-            ->get();
-    @endphp
-
     @if ($relatedPosts->count() > 0)
         <section class="py-5 bg-light">
             <div class="container">

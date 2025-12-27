@@ -61,8 +61,22 @@ class PageController extends Controller
         }
 
         $settings = Setting::pluck('value', 'key')->toArray();
+        $previousPost = Post::where('is_published', true)
+            ->where('id', '<', $post->id)
+            ->orderBy('id', 'desc')
+            ->first();
+        $nextPost = Post::where('is_published', true)
+            ->where('id', '>', $post->id)
+            ->orderBy('id', 'asc')
+            ->first();
+        $relatedPosts = Post::where('is_published', true)
+            ->where('id', '!=', $post->id)
+            ->where('category', $post->category)
+            ->orderBy('published_at', 'desc')
+            ->take(3)
+            ->get();
 
-        return view('posts.show', compact('settings', 'post'));
+        return view('posts.show', compact('settings', 'post', 'previousPost', 'nextPost', 'relatedPosts'));
     }
 
     public function search(Request $request)

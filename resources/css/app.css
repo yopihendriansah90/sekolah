@@ -87,6 +87,26 @@
 .hero-cta-buttons .btn-primary:hover {
     background: white;
     color: var(--primary-blue);
+    border-color: #e2e8f0;
+}
+
+.hero-cta-buttons .btn-hero-secondary {
+    background: white;
+    color: var(--primary-blue);
+    border: 2px solid #d1d5db;
+    box-shadow: 0 6px 18px rgba(30, 64, 175, 0.15);
+}
+
+.hero-cta-buttons .btn-hero-secondary:hover {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+    box-shadow: 0 10px 24px rgba(30, 64, 175, 0.25);
+}
+
+.hero-cta-buttons .btn:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 3px;
 }
 
 .hero-cta-buttons .btn-outline-light {

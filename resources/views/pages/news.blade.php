@@ -73,8 +73,11 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="mt-4 d-flex justify-content-center">
-                    {{ $posts->links() }}
+                <div class="mt-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
+                    <small class="text-muted">
+                        Menampilkan {{ $posts->firstItem() }}-{{ $posts->lastItem() }} dari {{ $posts->total() }} berita
+                    </small>
+                    {{ $posts->onEachSide(1)->links('pagination::bootstrap-5') }}
                 </div>
             @else
                 <div class="py-5 text-center">

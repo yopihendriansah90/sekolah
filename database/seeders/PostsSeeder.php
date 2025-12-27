@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\UnreachableUrl;
 
 class PostsSeeder extends Seeder
 {
@@ -61,6 +63,19 @@ class PostsSeeder extends Seeder
             ],
         ];
 
+        for ($i = 1; $i <= 20; $i++) {
+            $title = fake()->sentence(6);
+            $posts[] = [
+                'title' => $title,
+                'slug' => Str::slug($title).'-'.$i,
+                'body' => '<p>'.implode('</p><p>', fake()->paragraphs(3)).'</p>',
+                'category' => fake()->randomElement(['Berita Sekolah', 'Pengumuman', 'Kegiatan Siswa', 'Artikel Edukasi']),
+                'is_published' => true,
+                'published_at' => Carbon::now()->subDays(fake()->numberBetween(1, 60)),
+                'author_id' => 1,
+            ];
+        }
+
         foreach ($posts as $index => $postData) {
             $post = Post::create($postData);
 
@@ -75,10 +90,14 @@ class PostsSeeder extends Seeder
 
                 // Add a cover image to each published post
                 if (isset($imageUrls[$index])) {
-                    $post->addMediaFromUrl($imageUrls[$index])
-                        ->usingName('Cover image for '.$post->title)
-                        ->usingFileName('cover-'.$post->slug.'.jpg')
-                        ->toMediaCollection('cover');
+                    try {
+                        $post->addMediaFromUrl($imageUrls[$index])
+                            ->usingName('Cover image for '.$post->title)
+                            ->usingFileName('cover-'.$post->slug.'.jpg')
+                            ->toMediaCollection('cover');
+                    } catch (UnreachableUrl $e) {
+                        // Skip remote images when the URL is unreachable (offline/dev environments).
+                    }
                 }
             }
         }
