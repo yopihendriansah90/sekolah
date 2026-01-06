@@ -37,6 +37,13 @@ class PageController extends Controller
         return view('pages.teachers', compact('settings', 'gurus'));
     }
 
+    public function showTeacher(Guru $guru)
+    {
+        $settings = Setting::pluck('value', 'key')->toArray();
+
+        return view('pages.teacher-detail', compact('settings', 'guru'));
+    }
+
     public function students()
     {
         $settings = Setting::pluck('value', 'key')->toArray();

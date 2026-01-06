@@ -10,6 +10,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tentang', [PageController::class, 'about'])->name('about');
 Route::get('/fasilitas', [PageController::class, 'facilities'])->name('facilities');
 Route::get('/guru', [PageController::class, 'teachers'])->name('teachers');
+Route::get('/guru/{guru}', [PageController::class, 'showTeacher'])->name('teachers.show');
 Route::get('/siswa', [PageController::class, 'students'])->name('students');
 Route::get('/berita', [PageController::class, 'news'])->name('news');
 Route::get('/berita/{post}', [PageController::class, 'showPost'])->name('posts.show');

@@ -44,6 +44,9 @@
                                     <h6 class="card-title fw-bold">{{ $guru->name }}</h6>
                                     <p class="mb-2 text-primary">{{ $guru->subject }}</p>
                                     <small class="mb-2 text-muted d-block">NIP: {{ $guru->nip }}</small>
+                                    <a href="{{ route('teachers.show', $guru) }}" class="mt-2 btn btn-outline-primary btn-sm">
+                                        Lihat Profil
+                                    </a>
                                 </div>
                             </div>
                         </div>
