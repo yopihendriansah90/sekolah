@@ -8,7 +8,9 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
                     <div class="mb-4 display-1 fw-bold text-primary">404</div>
-                    <h1 class="mb-3 fw-bold">Maaf, halamannya belum ada</h1>
+                    <h1 class="mb-3 fw-bold">
+                        Maaf, halaman {{ $settings['school_name'] ?? 'Sekolah' }} belum ada
+                    </h1>
                     <p class="mb-4 lead text-muted">
                         Sepertinya alamat yang kamu buka tidak ditemukan atau sudah dipindah.
                         Tidak apa-apa, kamu bisa kembali ke halaman utama atau cari informasi lain.
